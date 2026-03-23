@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -207,6 +206,8 @@
     .hero-marker { display: none; }
     .email-name-row { grid-template-columns: 1fr; }
     nav .nav-links { display: none; }
+    .ai-grid { grid-template-columns: 1fr !important; gap: 2.5rem !important; }
+    .ai-grid > div:first-child { padding-top: 0 !important; }
   }
 </style>
 </head>
@@ -437,7 +438,7 @@
 <!-- AI / THE CURRENT REALITY -->
 <section style="background:var(--chalk);padding:clamp(4rem,8vw,8rem) var(--gutter);">
   <div class="section-inner">
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;">
+    <div class="ai-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;">
       <div>
         <p class="section-label">The Current Reality</p>
         <h2 class="section-title">Your competitors are not waiting.</h2>
