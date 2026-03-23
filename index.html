@@ -28,7 +28,7 @@
     --gutter: clamp(1.5rem, 5vw, 4rem);
   }
   html { scroll-behavior: smooth; }
-  body { font-family: var(--font-body); background: var(--chalk); color: var(--ink); font-size: 16px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+  body { font-family: var(--font-body); background: var(--chalk); color: var(--ink); font-size: 17px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
 
   /* NAV */
   nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(248,246,242,0.93); backdrop-filter: blur(12px); border-bottom: 0.5px solid var(--rule); padding: 0 var(--gutter); height: 64px; display: flex; align-items: center; justify-content: space-between; }
@@ -47,7 +47,7 @@
   .hero-eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--stone-400); margin-bottom: 2rem; }
   .hero-headline { font-family: var(--font-display); font-size: clamp(3rem, 7vw, 6.5rem); font-weight: 300; line-height: 1.05; letter-spacing: -0.01em; color: var(--ink); margin-bottom: 2rem; max-width: 800px; }
   .hero-headline em { font-style: italic; color: var(--accent); }
-  .hero-sub { font-size: 18px; font-weight: 300; color: var(--stone-600); max-width: 520px; line-height: 1.7; margin-bottom: 3rem; }
+  .hero-sub { font-size: 18px; font-weight: 400; color: var(--stone-800); max-width: 520px; line-height: 1.7; margin-bottom: 3rem; }
   .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
   .btn-primary { display: inline-block; background: var(--ink); color: var(--chalk); padding: 0.9rem 2rem; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; border-radius: 2px; transition: background 0.2s; border: none; cursor: pointer; font-family: var(--font-body); }
   .btn-primary:hover { background: var(--accent); }
@@ -61,7 +61,7 @@
   .section-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--stone-400); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem; }
   .section-label::after { content: ''; flex: 1; height: 0.5px; background: var(--stone-200); max-width: 80px; }
   h2.section-title { font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 300; line-height: 1.15; margin-bottom: 1.5rem; }
-  .section-body { font-size: 17px; font-weight: 300; color: var(--stone-600); max-width: 600px; line-height: 1.8; }
+  .section-body { font-size: 17px; font-weight: 400; color: var(--stone-800); max-width: 600px; line-height: 1.8; }
 
   /* PROBLEM */
   .problem { background: var(--stone-800); color: var(--chalk); }
@@ -132,9 +132,9 @@
   .quiz-step.active { display: block; animation: fadeIn 0.3s ease; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
   .quiz-q-num { font-family: var(--font-mono); font-size: 11px; color: var(--stone-400); letter-spacing: 0.08em; margin-bottom: 0.75rem; }
-  .quiz-q-text { font-family: var(--font-display); font-size: 1.5rem; font-weight: 400; color: var(--ink); margin-bottom: 2rem; line-height: 1.4; }
+  .quiz-q-text { font-family: var(--font-display); font-size: 1.75rem; font-weight: 400; color: var(--ink); margin-bottom: 2rem; line-height: 1.4; }
   .quiz-options { display: flex; flex-direction: column; gap: 0.75rem; }
-  .quiz-option { border: 1px solid var(--stone-200); border-radius: 3px; padding: 1rem 1.25rem; font-size: 14px; color: var(--stone-600); cursor: pointer; transition: all 0.2s; text-align: left; background: transparent; font-family: var(--font-body); line-height: 1.5; }
+  .quiz-option { border: 1px solid var(--stone-200); border-radius: 3px; padding: 1rem 1.25rem; font-size: 16px; color: var(--stone-800); cursor: pointer; transition: all 0.2s; text-align: left; background: transparent; font-family: var(--font-body); line-height: 1.5; }
   .quiz-option:hover { border-color: var(--ink); color: var(--ink); background: var(--stone-100); }
   .quiz-option.selected { border-color: var(--ink); color: var(--ink); background: var(--stone-100); }
   .quiz-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; }
@@ -209,9 +209,17 @@
     .ai-grid { grid-template-columns: 1fr !important; gap: 2.5rem !important; }
     .ai-grid > div:first-child { padding-top: 0 !important; }
   }
+  /* FLOATING CTA */
+  .floating-cta { position: fixed; bottom: 2rem; right: 2rem; z-index: 200; background: var(--ink); color: var(--chalk); padding: 0.9rem 1.75rem; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; border-radius: 2px; font-family: var(--font-body); box-shadow: 0 4px 24px rgba(0,0,0,0.18); transition: all 0.3s ease; opacity: 0; transform: translateY(12px); pointer-events: none; }
+  .floating-cta.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+  .floating-cta:hover { background: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.22); }
+  @media (max-width: 768px) { .floating-cta { bottom: 1.25rem; right: 1.25rem; font-size: 12px; padding: 0.8rem 1.25rem; } }
 </style>
 </head>
 <body>
+
+<!-- FLOATING CTA -->
+<a href="#assessment" class="floating-cta" id="floatingCta">Find Your Stage</a>
 
 <!-- NAV -->
 <nav>
@@ -613,7 +621,7 @@
           <div class="result-next">
             <div class="result-next-label">What would you like to do next?</div>
             <div class="result-actions">
-              <a href="#" class="btn-primary">Book a Clarity Call</a>
+              <a href="mailto:admin@clarys.systems?subject=Clarity Call Request" class="btn-primary">Book a Clarity Call</a>
               <button class="result-retake" onclick="retakeQuiz()">Retake Assessment</button>
             </div>
           </div>
@@ -642,7 +650,7 @@
   <p class="cta-sub">Find out where your organization is structurally -- and what it takes to move forward.</p>
   <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
     <a href="#assessment" class="btn-primary">Take the Assessment</a>
-    <a href="#" class="btn-ghost" style="color:rgba(248,246,242,0.6);border-color:rgba(248,246,242,0.2)">Book a Clarity Call</a>
+    <a href="mailto:admin@clarys.systems?subject=Clarity Call Request" class="btn-ghost" style="color:rgba(248,246,242,0.6);border-color:rgba(248,246,242,0.2)">Book a Clarity Call</a>
   </div>
   <p class="cta-tagline">CLARYS. Architecture for humans.</p>
 </section>
@@ -655,6 +663,16 @@
 </footer>
 
 <script>
+  // FLOATING CTA
+  const floatingCta = document.getElementById('floatingCta');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 600) {
+      floatingCta.classList.add('visible');
+    } else {
+      floatingCta.classList.remove('visible');
+    }
+  });
+
   // STAGE ACCORDION
   function toggleStage(el) {
     const isActive = el.classList.contains('active');
