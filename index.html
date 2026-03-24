@@ -210,9 +210,9 @@
     .ai-grid > div:first-child { padding-top: 0 !important; }
   }
   /* FLOATING CTA */
-  .floating-cta { position: fixed; bottom: 2rem; right: 2rem; z-index: 200; background: var(--ink); color: var(--chalk); padding: 0.9rem 1.75rem; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; border-radius: 2px; font-family: var(--font-body); box-shadow: 0 4px 24px rgba(0,0,0,0.18); transition: all 0.3s ease; opacity: 0; transform: translateY(12px); pointer-events: none; }
+  .floating-cta { position: fixed; bottom: 2rem; right: 2rem; z-index: 200; background: rgba(24,23,26,0.65); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); color: var(--chalk); padding: 0.9rem 1.75rem; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; border-radius: 3px; font-family: var(--font-body); border: 0.5px solid rgba(248,246,242,0.15); box-shadow: 0 4px 24px rgba(0,0,0,0.15); transition: all 0.3s ease; opacity: 0; transform: translateY(12px); pointer-events: none; }
   .floating-cta.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
-  .floating-cta:hover { background: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.22); }
+  .floating-cta:hover { background: rgba(24,23,26,0.85); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
   @media (max-width: 768px) { .floating-cta { bottom: 1.25rem; right: 1.25rem; font-size: 12px; padding: 0.8rem 1.25rem; } }
 </style>
 </head>
@@ -621,7 +621,7 @@
           <div class="result-next">
             <div class="result-next-label">What would you like to do next?</div>
             <div class="result-actions">
-              <a href="mailto:admin@clarys.systems?subject=Clarity Call Request" class="btn-primary">Book a Clarity Call</a>
+              <a href="mailto:clarity@clarys.systems?subject=Clarity Call Request" class="btn-primary">Book a Clarity Call</a>
               <button class="result-retake" onclick="retakeQuiz()">Retake Assessment</button>
             </div>
           </div>
@@ -650,14 +650,15 @@
   <p class="cta-sub">Find out where your organization is structurally -- and what it takes to move forward.</p>
   <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
     <a href="#assessment" class="btn-primary">Take the Assessment</a>
-    <a href="mailto:admin@clarys.systems?subject=Clarity Call Request" class="btn-ghost" style="color:rgba(248,246,242,0.6);border-color:rgba(248,246,242,0.2)">Book a Clarity Call</a>
+    <a href="mailto:clarity@clarys.systems?subject=Clarity Call Request" class="btn-ghost" style="color:rgba(248,246,242,0.6);border-color:rgba(248,246,242,0.2)">Book a Clarity Call</a>
   </div>
   <p class="cta-tagline">CLARYS. Architecture for humans.</p>
 </section>
 
 <!-- FOOTER -->
-<footer>
+<footer id="siteFooter">
   <span class="footer-logo">CLARYS</span>
+  <a href="mailto:clarity@clarys.systems" style="color:rgba(248,246,242,0.5);font-family:var(--font-mono);font-size:12px;text-decoration:none;letter-spacing:0.04em;">clarity@clarys.systems</a>
   <span class="footer-rise">CLARYS is home to CLARYS RISE — workforce development for underserved youth</span>
   <span class="footer-copy">clarys.systems &copy; 2025</span>
 </footer>
@@ -665,8 +666,11 @@
 <script>
   // FLOATING CTA
   const floatingCta = document.getElementById('floatingCta');
+  const siteFooter = document.getElementById('siteFooter');
   window.addEventListener('scroll', () => {
-    if (window.scrollY > 600) {
+    const footerTop = siteFooter.getBoundingClientRect().top;
+    const nearFooter = footerTop < window.innerHeight + 20;
+    if (window.scrollY > 600 && !nearFooter) {
       floatingCta.classList.add('visible');
     } else {
       floatingCta.classList.remove('visible');
