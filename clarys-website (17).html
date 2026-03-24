@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CLARYS — Systems Architecture for Founder-Led Organizations</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --chalk: #F8F6F2;
+    --ink: #18171A;
+    --stone-100: #EDE9E0;
+    --stone-200: #D4CFC4;
+    --stone-400: #9E9890;
+    --stone-600: #6B6660;
+    --stone-800: #2E2C28;
+    --accent: #2B3D52;
+    --accent-mid: #4A6380;
+    --accent-light: #E4EBF2;
+    --rule: rgba(30,26,22,0.12);
+    --font-display: 'Cormorant Garamond', Georgia, serif;
+    --font-body: 'DM Sans', sans-serif;
+    --font-mono: 'DM Mono', monospace;
+    --max: 1100px;
+    --gutter: clamp(1.5rem, 5vw, 4rem);
+  }
+  html { scroll-behavior: smooth; }
+  body { font-family: var(--font-body); background: var(--chalk); color: var(--ink); font-size: 17px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+
+  /* NAV */
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(248,246,242,0.93); backdrop-filter: blur(12px); border-bottom: 0.5px solid var(--rule); padding: 0 var(--gutter); height: 64px; display: flex; align-items: center; justify-content: space-between; }
+  .nav-logo { font-family: var(--font-display); font-size: 22px; font-weight: 500; letter-spacing: 0.12em; color: var(--ink); text-decoration: none; }
+  .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
+  .nav-links a { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--stone-600); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-cta { background: var(--ink); color: var(--chalk) !important; padding: 0.5rem 1.25rem; border-radius: 2px; }
+  .nav-cta:hover { background: var(--accent); color: var(--chalk) !important; }
+
+  /* HERO */
+  .hero { min-height: 100vh; display: flex; align-items: center; padding: 120px var(--gutter) 80px; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: 0; right: 0; width: 50%; height: 100%; background: linear-gradient(135deg, transparent 0%, rgba(43,61,82,0.04) 100%); pointer-events: none; }
+  .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(var(--rule) 1px, transparent 1px), linear-gradient(90deg, var(--rule) 1px, transparent 1px); background-size: 80px 80px; opacity: 0.4; pointer-events: none; }
+  .hero-inner { max-width: var(--max); margin: 0 auto; width: 100%; position: relative; }
+  .hero-eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--stone-400); margin-bottom: 2rem; }
+  .hero-headline { font-family: var(--font-display); font-size: clamp(3rem, 7vw, 6.5rem); font-weight: 300; line-height: 1.05; letter-spacing: -0.01em; color: var(--ink); margin-bottom: 2rem; max-width: 800px; }
+  .hero-headline em { font-style: italic; color: var(--accent); }
+  .hero-sub { font-size: 18px; font-weight: 400; color: var(--stone-800); max-width: 520px; line-height: 1.7; margin-bottom: 3rem; }
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary { display: inline-block; background: var(--ink); color: var(--chalk); padding: 0.9rem 2rem; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; border-radius: 2px; transition: background 0.2s; border: none; cursor: pointer; font-family: var(--font-body); }
+  .btn-primary:hover { background: var(--accent); }
+  .btn-ghost { display: inline-block; border: 1px solid var(--stone-200); color: var(--stone-600); padding: 0.9rem 2rem; font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; border-radius: 2px; transition: all 0.2s; background: transparent; cursor: pointer; font-family: var(--font-body); }
+  .btn-ghost:hover { border-color: var(--ink); color: var(--ink); }
+  .hero-marker { position: absolute; right: 0; top: 50%; transform: translateY(-50%); font-family: var(--font-display); font-size: clamp(8rem, 14vw, 16rem); font-weight: 300; color: rgba(43,61,82,0.04); letter-spacing: -0.05em; pointer-events: none; line-height: 1; user-select: none; }
+
+  /* SECTION BASE */
+  section { padding: clamp(4rem, 8vw, 8rem) var(--gutter); }
+  .section-inner { max-width: var(--max); margin: 0 auto; }
+  .section-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--stone-400); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 1rem; }
+  .section-label::after { content: ''; flex: 1; height: 0.5px; background: var(--stone-200); max-width: 80px; }
+  h2.section-title { font-family: var(--font-display); font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 300; line-height: 1.15; margin-bottom: 1.5rem; }
+  .section-body { font-size: 17px; font-weight: 400; color: var(--stone-800); max-width: 600px; line-height: 1.8; }
+
+  /* PROBLEM */
+  .problem { background: var(--stone-800); color: var(--chalk); }
+  .problem .section-label { color: rgba(248,246,242,0.35); }
+  .problem .section-label::after { background: rgba(248,246,242,0.12); }
+  .problem h2.section-title { color: var(--chalk); }
+  .problem .section-body { color: rgba(248,246,242,0.65); }
+  .problem-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; margin-top: 4rem; }
+  .problem-stat { border-top: 0.5px solid rgba(248,246,242,0.15); padding-top: 1.5rem; }
+  .problem-stat-num { font-family: var(--font-display); font-size: 3.5rem; font-weight: 300; color: var(--chalk); line-height: 1; margin-bottom: 0.5rem; }
+  .problem-stat-label { font-size: 14px; color: rgba(248,246,242,0.5); letter-spacing: 0.04em; }
+  .problem-quote { grid-column: 1 / -1; border-left: 2px solid rgba(248,246,242,0.2); padding-left: 2rem; margin-top: 1rem; }
+  .problem-quote p { font-family: var(--font-display); font-size: clamp(1.4rem, 2.5vw, 2rem); font-style: italic; font-weight: 300; color: rgba(248,246,242,0.8); line-height: 1.5; }
+
+  /* OWNERSHIP STATE MODEL */
+  .osm { background: var(--chalk); }
+  .osm-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; margin-bottom: 5rem; }
+  .osm-stages { display: flex; flex-direction: column; gap: 0; }
+  .stage { border-top: 0.5px solid var(--rule); padding: 2rem 0; display: grid; grid-template-columns: 48px 1fr; gap: 1.5rem; align-items: start; cursor: pointer; transition: background 0.2s; position: relative; }
+  .stage:last-child { border-bottom: 0.5px solid var(--rule); }
+  .stage-num { font-family: var(--font-mono); font-size: 11px; color: var(--stone-400); padding-top: 4px; letter-spacing: 0.06em; }
+  .stage-content {}
+  .stage-name { font-family: var(--font-display); font-size: 1.6rem; font-weight: 400; color: var(--ink); margin-bottom: 0.35rem; line-height: 1.2; }
+  .stage-tag { display: inline-block; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.2rem 0.6rem; border-radius: 2px; margin-bottom: 0.6rem; }
+  .stage-desc { font-size: 14px; color: var(--stone-600); line-height: 1.7; max-height: 0; overflow: hidden; transition: max-height 0.4s ease, opacity 0.3s ease; opacity: 0; }
+  .stage.active .stage-desc { max-height: 200px; opacity: 1; }
+  .stage-variant { font-size: 12px; font-family: var(--font-mono); color: var(--accent-mid); margin-top: 0.5rem; letter-spacing: 0.04em; display: none; }
+  .stage.active .stage-variant { display: block; }
+  .stage-arrow { position: absolute; right: 0; top: 2rem; font-size: 18px; color: var(--stone-400); transition: transform 0.3s; }
+  .stage.active .stage-arrow { transform: rotate(90deg); color: var(--ink); }
+
+  /* Stage color tags */
+  .tag-survival { background: rgba(180,60,40,0.08); color: #8B3020; }
+  .tag-reactive { background: rgba(180,120,40,0.08); color: #8B5E20; }
+  .tag-fractured { background: rgba(140,80,160,0.08); color: #6B3880; }
+  .tag-transitional { background: rgba(60,120,180,0.08); color: #2B5880; }
+  .tag-architectural { background: rgba(40,140,80,0.08); color: #1B6840; }
+
+  /* OSM Visual */
+  .osm-visual { position: sticky; top: 100px; }
+  .osm-diagram { background: var(--stone-800); border-radius: 4px; padding: 2.5rem; }
+  .osm-diagram-title { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(248,246,242,0.3); margin-bottom: 2rem; }
+  .osm-bar-group { display: flex; flex-direction: column; gap: 0.75rem; }
+  .osm-bar-row { display: flex; align-items: center; gap: 1rem; }
+  .osm-bar-label { font-size: 11px; color: rgba(248,246,242,0.5); width: 90px; text-align: right; flex-shrink: 0; font-family: var(--font-mono); letter-spacing: 0.03em; }
+  .osm-bar-track { flex: 1; height: 6px; background: rgba(248,246,242,0.08); border-radius: 3px; overflow: hidden; }
+  .osm-bar-fill { height: 100%; border-radius: 3px; transition: width 0.6s ease; }
+  .fill-survival { width: 12%; background: #B43C28; }
+  .fill-reactive { width: 30%; background: #C47820; }
+  .fill-fractured { width: 48%; background: #8C50A0; }
+  .fill-transitional { width: 68%; background: #3B78B4; }
+  .fill-architectural { width: 92%; background: #28A050; }
+  .osm-diagram-note { margin-top: 2rem; font-size: 12px; color: rgba(248,246,242,0.3); font-family: var(--font-mono); border-top: 0.5px solid rgba(248,246,242,0.08); padding-top: 1rem; letter-spacing: 0.04em; }
+
+  /* PROJECT TIER */
+  .project-tier { background: var(--accent-light); border-radius: 4px; padding: 1.5rem 2rem; margin-top: 2rem; border-left: 3px solid var(--accent); }
+  .project-tier-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-mid); margin-bottom: 0.4rem; }
+  .project-tier p { font-size: 13px; color: var(--accent); line-height: 1.6; }
+
+  /* ASSESSMENT */
+  .assessment { background: var(--stone-100); }
+  .assessment-wrap { max-width: 720px; margin: 0 auto; }
+  .assessment-intro { text-align: center; margin-bottom: 4rem; }
+  .quiz-container { background: white; border-radius: 4px; padding: 3rem; box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
+  .quiz-progress { height: 3px; background: var(--stone-200); border-radius: 2px; margin-bottom: 2.5rem; overflow: hidden; }
+  .quiz-progress-fill { height: 100%; background: var(--ink); border-radius: 2px; transition: width 0.4s ease; }
+  .quiz-step { display: none; }
+  .quiz-step.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .quiz-q-num { font-family: var(--font-mono); font-size: 11px; color: var(--stone-400); letter-spacing: 0.08em; margin-bottom: 0.75rem; }
+  .quiz-q-text { font-family: var(--font-display); font-size: 1.75rem; font-weight: 400; color: var(--ink); margin-bottom: 2rem; line-height: 1.4; }
+  .quiz-options { display: flex; flex-direction: column; gap: 0.75rem; }
+  .quiz-option { border: 1px solid var(--stone-200); border-radius: 3px; padding: 1rem 1.25rem; font-size: 16px; color: var(--stone-800); cursor: pointer; transition: all 0.2s; text-align: left; background: transparent; font-family: var(--font-body); line-height: 1.5; }
+  .quiz-option:hover { border-color: var(--ink); color: var(--ink); background: var(--stone-100); }
+  .quiz-option.selected { border-color: var(--ink); color: var(--ink); background: var(--stone-100); }
+  .quiz-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; }
+  .quiz-back { background: none; border: none; font-size: 13px; color: var(--stone-400); cursor: pointer; font-family: var(--font-body); letter-spacing: 0.04em; }
+  .quiz-back:hover { color: var(--ink); }
+
+  /* RESULT */
+  .quiz-result { display: none; }
+  .quiz-result.active { display: block; animation: fadeIn 0.4s ease; }
+  .result-stage-badge { display: inline-block; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.35rem 0.8rem; border-radius: 2px; margin-bottom: 1.25rem; }
+  .result-headline { font-family: var(--font-display); font-size: 2.2rem; font-weight: 300; color: var(--ink); margin-bottom: 1rem; line-height: 1.2; }
+  .result-body { font-size: 15px; color: var(--stone-600); line-height: 1.8; margin-bottom: 1.5rem; }
+  .result-variant-box { background: var(--accent-light); border-left: 3px solid var(--accent-mid); border-radius: 3px; padding: 1.25rem 1.5rem; margin-bottom: 1.5rem; }
+  .result-variant-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-mid); margin-bottom: 0.35rem; }
+  .result-variant-text { font-size: 14px; color: var(--accent); line-height: 1.6; }
+  .result-next { border-top: 0.5px solid var(--rule); padding-top: 1.5rem; margin-top: 1rem; }
+  .result-next-label { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--stone-400); margin-bottom: 0.75rem; }
+  .result-actions { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem; }
+  .result-retake { background: none; border: 1px solid var(--stone-200); color: var(--stone-600); padding: 0.7rem 1.5rem; font-size: 13px; border-radius: 2px; cursor: pointer; font-family: var(--font-body); letter-spacing: 0.04em; transition: all 0.2s; }
+  .result-retake:hover { border-color: var(--ink); color: var(--ink); }
+
+  /* EMAIL CAPTURE */
+  .email-step { display: none; }
+  .email-step.active { display: block; animation: fadeIn 0.3s ease; }
+  .email-form { display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem; }
+  .email-input { border: 1px solid var(--stone-200); border-radius: 3px; padding: 0.9rem 1.25rem; font-size: 15px; font-family: var(--font-body); color: var(--ink); background: white; outline: none; transition: border-color 0.2s; }
+  .email-input:focus { border-color: var(--ink); }
+  .email-name-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  .email-skip { font-size: 12px; color: var(--stone-400); text-align: center; cursor: pointer; margin-top: 0.5rem; }
+  .email-skip:hover { color: var(--stone-600); }
+
+  /* WHY CLARYS */
+  .why { background: var(--chalk); }
+  .why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3rem; margin-top: 4rem; }
+  .why-card { border-top: 2px solid var(--stone-200); padding-top: 2rem; }
+  .why-card-num { font-family: var(--font-mono); font-size: 11px; color: var(--stone-400); letter-spacing: 0.08em; margin-bottom: 1rem; }
+  .why-card-title { font-family: var(--font-display); font-size: 1.4rem; font-weight: 400; color: var(--ink); margin-bottom: 0.75rem; line-height: 1.3; }
+  .why-card-body { font-size: 14px; color: var(--stone-600); line-height: 1.7; }
+
+  /* RISE */
+  .rise { background: #F5F0E8; border-top: 0.5px solid #DDD5C0; }
+  .rise-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+  .rise-badge { display: inline-block; background: #C4956A; color: white; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; padding: 0.3rem 0.8rem; border-radius: 2px; margin-bottom: 1.5rem; }
+  .rise h2 { font-family: var(--font-display); font-size: clamp(1.8rem, 3vw, 2.8rem); font-weight: 300; color: #3A2E1E; line-height: 1.2; margin-bottom: 1rem; }
+  .rise p { font-size: 16px; color: #6B5A40; line-height: 1.8; }
+  .rise-visual { display: flex; flex-direction: column; gap: 1rem; }
+  .rise-phase { background: rgba(255,255,255,0.6); border-radius: 3px; padding: 1.25rem 1.5rem; border-left: 3px solid #C4956A; }
+  .rise-phase-label { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #C4956A; margin-bottom: 0.3rem; }
+  .rise-phase-text { font-size: 13px; color: #6B5A40; line-height: 1.5; }
+
+  /* CTA */
+  .cta-section { background: var(--stone-800); color: var(--chalk); text-align: center; padding: clamp(5rem, 10vw, 10rem) var(--gutter); }
+  .cta-eyebrow { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(248,246,242,0.35); margin-bottom: 2rem; }
+  .cta-headline { font-family: var(--font-display); font-size: clamp(2.5rem, 5vw, 5rem); font-weight: 300; color: var(--chalk); line-height: 1.1; margin-bottom: 1.5rem; max-width: 700px; margin-left: auto; margin-right: auto; }
+  .cta-sub { font-size: 17px; color: rgba(248,246,242,0.55); margin-bottom: 3rem; }
+  .cta-tagline { font-family: var(--font-display); font-size: 1rem; font-style: italic; color: rgba(248,246,242,0.3); margin-top: 3rem; letter-spacing: 0.06em; }
+
+  /* FOOTER */
+  footer { background: var(--ink); padding: 2.5rem var(--gutter); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+  .footer-logo { font-family: var(--font-display); font-size: 18px; letter-spacing: 0.12em; color: rgba(248,246,242,0.5); }
+  .footer-copy { font-size: 12px; color: rgba(248,246,242,0.25); font-family: var(--font-mono); }
+  .footer-rise { font-size: 12px; color: rgba(196,149,106,0.6); font-family: var(--font-mono); letter-spacing: 0.04em; }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .problem-grid, .osm-intro, .rise-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+    .why-grid { grid-template-columns: 1fr; }
+    .osm-visual { position: static; }
+    .hero-marker { display: none; }
+    .email-name-row { grid-template-columns: 1fr; }
+    nav .nav-links { display: none; }
+    .ai-grid { grid-template-columns: 1fr !important; gap: 2.5rem !important; }
+    .ai-grid > div:first-child { padding-top: 0 !important; }
+  }
+  /* FLOATING CTA */
+  .floating-cta { position: fixed; bottom: 2rem; right: 2rem; z-index: 200; background: rgba(24,23,26,0.65); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); color: var(--chalk); padding: 0.9rem 1.75rem; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none; border-radius: 3px; font-family: var(--font-body); border: 0.5px solid rgba(248,246,242,0.15); box-shadow: 0 4px 24px rgba(0,0,0,0.15); transition: all 0.3s ease; opacity: 0; transform: translateY(12px); pointer-events: none; }
+  .floating-cta.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
+  .floating-cta:hover { background: rgba(24,23,26,0.85); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
+  @media (max-width: 768px) { .floating-cta { bottom: 1.25rem; right: 1.25rem; font-size: 12px; padding: 0.8rem 1.25rem; } }
+</style>
+</head>
+<body>
+
+<!-- FLOATING CTA -->
+<a href="#assessment" class="floating-cta" id="floatingCta">Find Your Stage</a>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">CLARYS</a>
+  <ul class="nav-links">
+    <li><a href="#model">The Model</a></li>
+    <li><a href="#principles">Principles</a></li>
+    <li><a href="#assessment">Assessment</a></li>
+    <li><a href="#assessment" class="nav-cta">Find Your Stage</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <p class="hero-eyebrow">clarys.systems — Systems Architecture for Founder-Led Organizations</p>
+    <h1 class="hero-headline">It's not a people problem.<br><em>It's a structure problem.</em></h1>
+    <p class="hero-sub">Most organizational suffering isn't personal. It's structural. CLARYS builds the architecture that bears the weight -- so your people can make decisions, and you don't have to be in every room.</p>
+    <p style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.12em;color:var(--stone-400);margin-top:-1rem;margin-bottom:2rem;">CLARYS. Architecture for Humans.</p>
+    <div class="hero-actions">
+      <a href="#assessment" class="btn-primary">Find Your Ownership Stage</a>
+      <a href="#model" class="btn-ghost">The Model</a>
+    </div>
+  </div>
+  <div class="hero-marker">C</div>
+</section>
+
+<!-- PROBLEM -->
+<section class="problem">
+  <div class="section-inner">
+    <p class="section-label">The Problem</p>
+    <h2 class="section-title">Founders don't struggle from lack of effort.<br>They struggle from lack of structure.</h2>
+    <p class="section-body">The chaos you feel is not random. It has a shape. And once you can see the shape, you can build around it.</p>
+    <div class="problem-grid">
+      <div class="problem-stat">
+        <div class="problem-stat-num">78%</div>
+        <div class="problem-stat-label">of businesses with proven products still fail to scale. The obstacle is almost never the product. <span style="font-size:11px;color:rgba(248,246,242,0.4);font-family:var(--font-mono)">McKinsey</span></div>
+      </div>
+      <div class="problem-stat">
+        <div class="problem-stat-num">5</div>
+        <div class="problem-stat-label">distinct ownership states — most founders misdiagnose which one they're in</div>
+      </div>
+      <div class="problem-quote">
+        <p>"Most organizational suffering is structural, not personal. The system is the problem. The system is also the solution."</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY CLARYS -->
+<section class="why">
+  <div class="section-inner">
+    <p class="section-label">Why CLARYS</p>
+    <h2 class="section-title">This is not consulting.<br>It is architecture.</h2>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-card-num">01</div>
+        <div class="why-card-title">Diagnostic first. Always.</div>
+        <div class="why-card-body">CLARYS does not prescribe before it diagnoses. Every engagement begins with a structural assessment that identifies the real problem, not the presenting one.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-card-num">02</div>
+        <div class="why-card-title">Industry-agnostic. Problem-specific.</div>
+        <div class="why-card-body">Structural problems do not belong to any one industry. The CLARYS methodology applies wherever founder-led organizations exist and wherever systems were never finished in the first place.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-card-num">03</div>
+        <div class="why-card-title">Built to hold. Built to last.</div>
+        <div class="why-card-body">Systems should make organizations quieter. Humans are not designed to absorb system failure. Architecture should. That is what CLARYS builds. Architecture for humans.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OWNERSHIP STATE MODEL -->
+<section class="osm" id="model">
+  <div class="section-inner">
+    <p class="section-label">The Ownership State Model</p>
+    <div class="osm-intro">
+      <div>
+        <h2 class="section-title">Where are you, really?</h2>
+        <p class="section-body">Every founder-led organization occupies one of five structural states. The state determines what is possible, what is breaking, and what needs to be built next. CLARYS diagnoses the state and builds the architecture to move through it.</p>
+        <div class="project-tier">
+          <div class="project-tier-label">Project-Based Engagement</div>
+          <p>Architectural Owners who have built strong foundations still encounter inflection points: key hires, market expansion, system stress tests. CLARYS offers project-based engagements alongside Stage 5 for exactly these moments.</p>
+        </div>
+      </div>
+      <div class="osm-visual">
+        <div class="osm-diagram">
+          <div class="osm-diagram-title">Structural Capacity Index</div>
+          <div class="osm-bar-group">
+            <div class="osm-bar-row">
+              <span class="osm-bar-label">Survival</span>
+              <div class="osm-bar-track"><div class="osm-bar-fill fill-survival"></div></div>
+            </div>
+            <div class="osm-bar-row">
+              <span class="osm-bar-label">Reactive</span>
+              <div class="osm-bar-track"><div class="osm-bar-fill fill-reactive"></div></div>
+            </div>
+            <div class="osm-bar-row">
+              <span class="osm-bar-label">Fractured</span>
+              <div class="osm-bar-track"><div class="osm-bar-fill fill-fractured"></div></div>
+            </div>
+            <div class="osm-bar-row">
+              <span class="osm-bar-label">Transitional</span>
+              <div class="osm-bar-track"><div class="osm-bar-fill fill-transitional"></div></div>
+            </div>
+            <div class="osm-bar-row">
+              <span class="osm-bar-label">Architectural</span>
+              <div class="osm-bar-track"><div class="osm-bar-fill fill-architectural"></div></div>
+            </div>
+          </div>
+          <div class="osm-diagram-note">Structural capacity determines what growth is possible</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STAGES -->
+    <div class="osm-stages">
+
+      <div class="stage" onclick="toggleStage(this)">
+        <span class="stage-num">01</span>
+        <div class="stage-content">
+          <div class="stage-tag tag-survival">Survival Owner</div>
+          <div class="stage-name">The founder is the infrastructure.</div>
+          <div class="stage-desc">Nothing moves without you. Every decision, every client interaction, every operational function runs through the founder personally. There are no systems — only habits and heroics. The business cannot survive a week without your direct involvement. This is not a hustle problem. It is a structural one.</div>
+        </div>
+        <span class="stage-arrow">›</span>
+      </div>
+
+      <div class="stage" onclick="toggleStage(this)">
+        <span class="stage-num">02</span>
+        <div class="stage-content">
+          <div class="stage-tag tag-reactive">Reactive Owner</div>
+          <div class="stage-name">Momentum without architecture.</div>
+          <div class="stage-desc">The business is moving. Revenue is coming in. But the founder is still the decision gate on nearly everything. Delegation happens, but accountability doesn't hold. Every week feels like putting out fires. It looks like progress from the outside. It feels like drowning from the inside. The structure has not caught up to the motion.</div>
+        </div>
+        <span class="stage-arrow">›</span>
+      </div>
+
+      <div class="stage" onclick="toggleStage(this)">
+        <span class="stage-num">03</span>
+        <div class="stage-content">
+          <div class="stage-tag tag-fractured">Fractured Owner</div>
+          <div class="stage-name">Structure exists. Authority doesn't.</div>
+          <div class="stage-desc">The organization has structure on paper, but the authority layer is misaligned. Co-owners with different operating modes send competing signals to the team. Vision is stated but not transmitted. People fill the vacuum themselves — and they fill it differently. The chaos is invisible to the people causing it.</div>
+          <div class="stage-variant">⚑ Abdicating Owner variant: The founder is still in charge on paper. But they have mentally left the building. The team knows. The systems don't reflect it yet.</div>
+        </div>
+        <span class="stage-arrow">›</span>
+      </div>
+
+      <div class="stage" onclick="toggleStage(this)">
+        <span class="stage-num">04</span>
+        <div class="stage-content">
+          <div class="stage-tag tag-transitional">Transitional Owner</div>
+          <div class="stage-name">Load-bearing systems, not yet self-sustaining.</div>
+          <div class="stage-desc">Real structure exists and it is holding weight. The founder is beginning to lead rather than run. Delegation is happening and some of it is sticking. But the systems are not yet independent. Growth creates friction. The organization can hold daily production — it cannot yet hold scale. You are close. The gate between here and Architectural is the most critical crossing in the model.</div>
+        </div>
+        <span class="stage-arrow">›</span>
+      </div>
+
+      <div class="stage" onclick="toggleStage(this)">
+        <span class="stage-num">05</span>
+        <div class="stage-content">
+          <div class="stage-tag tag-architectural">Architectural Owner</div>
+          <div class="stage-name">The founder leads. The organization runs.</div>
+          <div class="stage-desc">Systems are load-bearing and self-sustaining. The founder leads the organization rather than running inside it. Accountability is structural, not personal. Growth is possible without chaos. This is not the end of the work — it is the beginning of a different kind of work. The architecture holds. Now you build on top of it.</div>
+          <div class="stage-variant">⚑ Plateaued Owner variant: The structure is real and it works. But it was built to hold a specific size — and that size is the ceiling. The founder doesn't know they've been parked.</div>
+        </div>
+        <span class="stage-arrow">›</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PRINCIPLES -->
+<section style="background:var(--stone-800);padding:clamp(4rem,8vw,8rem) var(--gutter);">
+  <div class="section-inner">
+    <p class="section-label" style="color:rgba(248,246,242,0.35);">What We Believe</p>
+    <h2 class="section-title" style="color:var(--chalk);margin-bottom:3rem;">The principles that<br>guide every decision.</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:0;">
+      <div style="border-top:0.5px solid rgba(248,246,242,0.12);padding:1.75rem 2rem 1.75rem 0;">
+        <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(248,246,242,0.3);margin-bottom:0.6rem;">01</div>
+        <p style="font-family:var(--font-display);font-size:1.2rem;font-weight:300;color:var(--chalk);line-height:1.4;">Structure replaces suffering.</p>
+      </div>
+      <div style="border-top:0.5px solid rgba(248,246,242,0.12);padding:1.75rem 2rem;">
+        <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(248,246,242,0.3);margin-bottom:0.6rem;">02</div>
+        <p style="font-family:var(--font-display);font-size:1.2rem;font-weight:300;color:var(--chalk);line-height:1.4;">Most organizational pain is architectural.</p>
+      </div>
+      <div style="border-top:0.5px solid rgba(248,246,242,0.12);padding:1.75rem 0 1.75rem 2rem;">
+        <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(248,246,242,0.3);margin-bottom:0.6rem;">03</div>
+        <p style="font-family:var(--font-display);font-size:1.2rem;font-weight:300;color:var(--chalk);line-height:1.4;">Hiring is a lagging indicator.</p>
+      </div>
+      <div style="border-top:0.5px solid rgba(248,246,242,0.12);padding:1.75rem 2rem 1.75rem 0;">
+        <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(248,246,242,0.3);margin-bottom:0.6rem;">04</div>
+        <p style="font-family:var(--font-display);font-size:1.2rem;font-weight:300;color:var(--chalk);line-height:1.4;">Enforcement is compassion.</p>
+      </div>
+      <div style="border-top:0.5px solid rgba(248,246,242,0.12);padding:1.75rem 2rem;">
+        <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(248,246,242,0.3);margin-bottom:0.6rem;">05</div>
+        <p style="font-family:var(--font-display);font-size:1.2rem;font-weight:300;color:var(--chalk);line-height:1.4;">Clarity outperforms charisma.</p>
+      </div>
+      <div style="border-top:0.5px solid rgba(248,246,242,0.12);padding:1.75rem 0 1.75rem 2rem;">
+        <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(248,246,242,0.3);margin-bottom:0.6rem;">06</div>
+        <p style="font-family:var(--font-display);font-size:1.2rem;font-weight:300;color:var(--chalk);line-height:1.4;">Discipline precedes growth.</p>
+      </div>
+      <div style="border-top:0.5px solid rgba(248,246,242,0.12);border-bottom:0.5px solid rgba(248,246,242,0.12);padding:1.75rem 2rem 1.75rem 0;">
+        <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(248,246,242,0.3);margin-bottom:0.6rem;">07</div>
+        <p style="font-family:var(--font-display);font-size:1.2rem;font-weight:300;color:var(--chalk);line-height:1.4;">Humans should not absorb system failure.</p>
+      </div>
+      <div style="border-top:0.5px solid rgba(248,246,242,0.12);border-bottom:0.5px solid rgba(248,246,242,0.12);padding:1.75rem 2rem;">
+        <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(248,246,242,0.3);margin-bottom:0.6rem;">08</div>
+        <p style="font-family:var(--font-display);font-size:1.2rem;font-weight:300;color:var(--chalk);line-height:1.4;">Architecture scales intelligence without scaling payroll.</p>
+      </div>
+      <div style="border-top:0.5px solid rgba(248,246,242,0.12);border-bottom:0.5px solid rgba(248,246,242,0.12);padding:1.75rem 0 1.75rem 2rem;">
+        <div style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(248,246,242,0.3);margin-bottom:0.6rem;">09</div>
+        <p style="font-family:var(--font-display);font-size:1.2rem;font-weight:300;color:var(--chalk);line-height:1.4;">Growth should make organizations quieter, not louder.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI / THE CURRENT REALITY -->
+<section style="background:var(--chalk);padding:clamp(4rem,8vw,8rem) var(--gutter);">
+  <div class="section-inner">
+    <div class="ai-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;">
+      <div>
+        <p class="section-label">The Current Reality</p>
+        <h2 class="section-title">Your competitors are not waiting.</h2>
+        <p class="section-body">AI has made intelligence abundant, memory durable, and coordination scalable. Organizations still running on people-heavy models built for a different era are not being conservative. They are falling behind.</p>
+        <p class="section-body" style="margin-top:1.5rem;">Part of what CLARYS builds is an organization that knows how to use the tools that exist right now. Not as novelty. As infrastructure.</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:1.5rem;padding-top:0.5rem;">
+        <div style="border-left:2px solid var(--stone-200);padding-left:1.5rem;">
+          <p style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--stone-400);margin-bottom:0.4rem;">The old model</p>
+          <p style="font-size:14px;color:var(--stone-600);line-height:1.7;">Scale headcount. Add coordination layers. Hire to compensate for ambiguity. Build organizations that depend on people absorbing what systems should hold.</p>
+        </div>
+        <div style="border-left:2px solid var(--accent);padding-left:1.5rem;">
+          <p style="font-family:var(--font-mono);font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent-mid);margin-bottom:0.4rem;">The CLARYS model</p>
+          <p style="font-size:14px;color:var(--stone-600);line-height:1.7;">Finish the systems first. Let architecture carry the load. Scale intelligence, not payroll. Build organizations that run on design rather than on the founder's constant presence.</p>
+        </div>
+        <div style="background:var(--stone-100);border-radius:3px;padding:1.5rem;margin-top:0.5rem;">
+          <p style="font-family:var(--font-display);font-size:1.1rem;font-style:italic;color:var(--ink);line-height:1.5;">If a competitor rebuilt your company today with modern architecture, how many of your current roles would still exist?</p>
+          <p style="font-size:12px;font-family:var(--font-mono);color:var(--stone-400);margin-top:0.75rem;letter-spacing:0.04em;">CLARYS helps you answer that question before the market does.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ASSESSMENT -->
+<section class="assessment" id="assessment">
+  <div class="section-inner">
+    <div class="assessment-wrap">
+      <div class="assessment-intro">
+        <p class="section-label" style="justify-content:center">Ownership State Assessment</p>
+        <h2 class="section-title" style="text-align:center">Which state are you in?</h2>
+        <p class="section-body" style="margin:0 auto; text-align:center">Eight questions. At the end, you will know exactly which state you are operating in, what it means, and what structural moves would make the biggest difference right now.</p>
+      </div>
+
+      <div class="quiz-container">
+        <div class="quiz-progress">
+          <div class="quiz-progress-fill" id="progressFill" style="width:0%"></div>
+        </div>
+
+        <!-- Q1 -->
+        <div class="quiz-step active" data-q="1">
+          <div class="quiz-q-num">Question 1 of 8</div>
+          <div class="quiz-q-text">When you take a day completely off, what happens to the business?</div>
+          <div class="quiz-options">
+            <button class="quiz-option" onclick="selectOption(this, 1, 'survival')">It essentially stops. Decisions wait, things fall through, clients notice.</button>
+            <button class="quiz-option" onclick="selectOption(this, 1, 'reactive')">It keeps moving but my phone doesn't stop. I'm still making calls remotely.</button>
+            <button class="quiz-option" onclick="selectOption(this, 1, 'fractured')">It runs, but I come back to confusion. People made different calls than I would have.</button>
+            <button class="quiz-option" onclick="selectOption(this, 1, 'transitional')">It mostly runs. There are a few things that wait for me but the day holds.</button>
+            <button class="quiz-option" onclick="selectOption(this, 1, 'architectural')">It runs. I trust the systems and the people in them.</button>
+          </div>
+          <div class="quiz-nav"><span></span><button class="btn-primary" onclick="nextQ(1)" id="next1" style="opacity:0.3;pointer-events:none">Next</button></div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="quiz-step" data-q="2">
+          <div class="quiz-q-num">Question 2 of 8</div>
+          <div class="quiz-q-text">How would you describe your team's ability to make decisions without you?</div>
+          <div class="quiz-options">
+            <button class="quiz-option" onclick="selectOption(this, 2, 'survival')">They don't. Everything comes to me.</button>
+            <button class="quiz-option" onclick="selectOption(this, 2, 'reactive')">They try, but I end up overriding or redoing a lot of it.</button>
+            <button class="quiz-option" onclick="selectOption(this, 2, 'fractured')">It depends on who they ask. We don't all give the same answers.</button>
+            <button class="quiz-option" onclick="selectOption(this, 2, 'transitional')">They can handle most things. The bigger calls still come to me.</button>
+            <button class="quiz-option" onclick="selectOption(this, 2, 'architectural')">They decide within their lanes. I'm brought in for strategy, not operations.</button>
+          </div>
+          <div class="quiz-nav"><button class="quiz-back" onclick="prevQ(2)">Back</button><button class="btn-primary" onclick="nextQ(2)" id="next2" style="opacity:0.3;pointer-events:none">Next</button></div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="quiz-step" data-q="3">
+          <div class="quiz-q-num">Question 3 of 8</div>
+          <div class="quiz-q-text">When you think about your leadership, which statement feels most honest?</div>
+          <div class="quiz-options">
+            <button class="quiz-option" onclick="selectOption(this, 3, 'survival')">I am the leader and the worker and the firefighter. All of it is me.</button>
+            <button class="quiz-option" onclick="selectOption(this, 3, 'reactive')">I lead by being available. If I slow down, things slow down.</button>
+            <button class="quiz-option" onclick="selectOption(this, 3, 'fractured')">There are multiple people in charge and we don't always align. The team feels it.</button>
+            <button class="quiz-option" onclick="selectOption(this, 3, 'fractured')">I'm still technically in charge but I've stepped back more than I've admitted.</button>
+            <button class="quiz-option" onclick="selectOption(this, 3, 'transitional')">I'm building toward leading from above rather than inside. I'm not there yet.</button>
+            <button class="quiz-option" onclick="selectOption(this, 3, 'architectural')">I lead through vision and structure. The organization doesn't need me in the work.</button>
+          </div>
+          <div class="quiz-nav"><button class="quiz-back" onclick="prevQ(3)">Back</button><button class="btn-primary" onclick="nextQ(3)" id="next3" style="opacity:0.3;pointer-events:none">Next</button></div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="quiz-step" data-q="4">
+          <div class="quiz-q-num">Question 4 of 8</div>
+          <div class="quiz-q-text">How would you describe your current growth situation?</div>
+          <div class="quiz-options">
+            <button class="quiz-option" onclick="selectOption(this, 4, 'survival')">Growth feels dangerous. More clients means more chaos.</button>
+            <button class="quiz-option" onclick="selectOption(this, 4, 'reactive')">We're growing but every new level creates new fires I didn't expect.</button>
+            <button class="quiz-option" onclick="selectOption(this, 4, 'fractured')">Growth is stalled or inconsistent. I think it's a people or culture issue.</button>
+            <button class="quiz-option" onclick="selectOption(this, 4, 'transitional')">We could grow more. The systems are almost ready. A few things need to hold first.</button>
+            <button class="quiz-option" onclick="selectOption(this, 4, 'architectural')">We're positioned for growth. I'm not sure what the next ceiling is yet.</button>
+          </div>
+          <div class="quiz-nav"><button class="quiz-back" onclick="prevQ(4)">Back</button><button class="btn-primary" onclick="nextQ(4)" id="next4" style="opacity:0.3;pointer-events:none">Next</button></div>
+        </div>
+
+        <!-- Q5 -->
+        <div class="quiz-step" data-q="5">
+          <div class="quiz-q-num">Question 5 of 8</div>
+          <div class="quiz-q-text">Do your documented processes reflect how work actually gets done?</div>
+          <div class="quiz-options">
+            <button class="quiz-option" onclick="selectOption(this, 5, 'survival')">We don't really have documented processes. It lives in my head.</button>
+            <button class="quiz-option" onclick="selectOption(this, 5, 'reactive')">Some things are written down. Most of the real process is still tribal knowledge.</button>
+            <button class="quiz-option" onclick="selectOption(this, 5, 'fractured')">We have docs but different people follow different versions. There's no single source of truth.</button>
+            <button class="quiz-option" onclick="selectOption(this, 5, 'transitional')">Most things are documented. Adoption is inconsistent but we're working on it.</button>
+            <button class="quiz-option" onclick="selectOption(this, 5, 'architectural')">Yes. Processes are documented, followed, and updated when they change.</button>
+          </div>
+          <div class="quiz-nav"><button class="quiz-back" onclick="prevQ(5)">Back</button><button class="btn-primary" onclick="nextQ(5)" id="next5" style="opacity:0.3;pointer-events:none">Next</button></div>
+        </div>
+
+        <!-- Q6 -->
+        <div class="quiz-step" data-q="6">
+          <div class="quiz-q-num">Question 6 of 8</div>
+          <div class="quiz-q-text">How do you feel about the revenue trajectory of your business right now?</div>
+          <div class="quiz-options">
+            <button class="quiz-option" onclick="selectOption(this, 6, 'survival')">Revenue is unpredictable. I don't know what next month looks like.</button>
+            <button class="quiz-option" onclick="selectOption(this, 6, 'reactive')">Revenue is coming in but it feels like I'm chasing it, not building it.</button>
+            <button class="quiz-option" onclick="selectOption(this, 6, 'fractured')">Revenue is okay but it's been flat. Something is blocking us and I can't name it.</button>
+            <button class="quiz-option" onclick="selectOption(this, 6, 'transitional')">Revenue is growing. I want to make sure the structure can hold what's coming.</button>
+            <button class="quiz-option" onclick="selectOption(this, 6, 'architectural')">Revenue is predictable and the model is proven. I'm thinking about the next level.</button>
+          </div>
+          <div class="quiz-nav"><button class="quiz-back" onclick="prevQ(6)">Back</button><button class="btn-primary" onclick="nextQ(6)" id="next6" style="opacity:0.3;pointer-events:none">Next</button></div>
+        </div>
+
+        <!-- Q7 -->
+        <div class="quiz-step" data-q="7">
+          <div class="quiz-q-num">Question 7 of 8</div>
+          <div class="quiz-q-text">Which of these most accurately describes the energy inside your organization right now?</div>
+          <div class="quiz-options">
+            <button class="quiz-option" onclick="selectOption(this, 7, 'survival')">Dependent. Everything waits for me.</button>
+            <button class="quiz-option" onclick="selectOption(this, 7, 'reactive')">Reactive. We respond well but we don't get ahead of things.</button>
+            <button class="quiz-option" onclick="selectOption(this, 7, 'fractured')">Confused. People are working hard but not always in the same direction.</button>
+            <button class="quiz-option" onclick="selectOption(this, 7, 'transitional')">Building. We're in progress. There's momentum but also friction.</button>
+            <button class="quiz-option" onclick="selectOption(this, 7, 'architectural')">Functional. The machine runs. I'm thinking about what comes next.</button>
+          </div>
+          <div class="quiz-nav"><button class="quiz-back" onclick="prevQ(7)">Back</button><button class="btn-primary" onclick="nextQ(7)" id="next7" style="opacity:0.3;pointer-events:none">Next</button></div>
+        </div>
+
+        <!-- Q8 -->
+        <div class="quiz-step" data-q="8">
+          <div class="quiz-q-num">Question 8 of 8</div>
+          <div class="quiz-q-text">If your business doubled in size next year, what would break first?</div>
+          <div class="quiz-options">
+            <button class="quiz-option" onclick="selectOption(this, 8, 'survival')">Me. I am already the bottleneck. More volume would make it worse.</button>
+            <button class="quiz-option" onclick="selectOption(this, 8, 'reactive')">The team. We would need more people but we have not finished the systems that tell us what we actually need.</button>
+            <button class="quiz-option" onclick="selectOption(this, 8, 'fractured')">Leadership. The cracks in how we operate would just get bigger.</button>
+            <button class="quiz-option" onclick="selectOption(this, 8, 'transitional')">A few specific systems. I know what they are. We are working on them.</button>
+            <button class="quiz-option" onclick="selectOption(this, 8, 'architectural')">Honestly, I would want to stress test it first. I think we are ready but I want to verify.</button>
+          </div>
+          <div class="quiz-nav"><button class="quiz-back" onclick="prevQ(8)">Back</button><button class="btn-primary" onclick="showEmailStep()" id="next8" style="opacity:0.3;pointer-events:none">See My Results</button></div>
+        </div>
+
+        <!-- EMAIL CAPTURE -->
+        <div class="email-step" id="emailStep">
+          <div class="quiz-q-num">Almost there</div>
+          <div class="quiz-q-text">Where should we send your full results?</div>
+          <p style="font-size:14px;color:var(--stone-600);margin-bottom:0.5rem">Your stage result includes specific structural notes and next steps. Enter your info below and we will send your full analysis.</p>
+          <div class="email-form">
+            <div class="email-name-row">
+              <input type="text" class="email-input" id="firstName" placeholder="First name">
+              <input type="text" class="email-input" id="lastName" placeholder="Last name">
+            </div>
+            <input type="email" class="email-input" id="emailInput" placeholder="Your email address">
+            <button class="btn-primary" onclick="submitAndShowResult()">View My Results</button>
+          </div>
+          <p class="email-skip" onclick="showResult()">Skip and view results now</p>
+        </div>
+
+        <!-- RESULTS -->
+        <div class="quiz-result" id="quizResult">
+          <div id="resultContent"></div>
+          <div class="result-next">
+            <div class="result-next-label">What would you like to do next?</div>
+            <div class="result-actions">
+              <a href="mailto:clarity@clarys.systems?subject=Clarity Call Request" class="btn-primary">Book a Clarity Call</a>
+              <button class="result-retake" onclick="retakeQuiz()">Retake Assessment</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RISE -->
+<section class="rise">
+  <div class="section-inner">
+    <div style="max-width:680px;">
+      <span class="rise-badge">CLARYS RISE</span>
+      <h2 style="font-family:var(--font-display);font-size:clamp(1.6rem,2.5vw,2.4rem);font-weight:300;color:#3A2E1E;line-height:1.25;margin-bottom:1rem;">Like someone expected them to arrive.</h2>
+      <p style="font-size:16px;color:#6B5A40;line-height:1.8;">CLARYS RISE is the nonprofit arm of CLARYS. It exists to bring workforce development and systems exposure to underserved youth.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <p class="cta-eyebrow">Ready to build</p>
+  <h2 class="cta-headline">The organizations winning the next decade are not louder. They are lighter.</h2>
+  <p class="cta-sub">Find out where your organization is structurally -- and what it takes to move forward.</p>
+  <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+    <a href="#assessment" class="btn-primary">Take the Assessment</a>
+    <a href="mailto:clarity@clarys.systems?subject=Clarity Call Request" class="btn-ghost" style="color:rgba(248,246,242,0.6);border-color:rgba(248,246,242,0.2)">Book a Clarity Call</a>
+  </div>
+  <p class="cta-tagline">CLARYS. Architecture for humans.</p>
+</section>
+
+<!-- FOOTER -->
+<footer id="siteFooter">
+  <span class="footer-logo">CLARYS</span>
+  <a href="mailto:clarity@clarys.systems" style="color:rgba(248,246,242,0.5);font-family:var(--font-mono);font-size:12px;text-decoration:none;letter-spacing:0.04em;">clarity@clarys.systems</a>
+  <span class="footer-rise">CLARYS is home to CLARYS RISE — workforce development for underserved youth</span>
+  <span class="footer-copy">clarys.systems &copy; 2025</span>
+</footer>
+
+<script>
+  // FLOATING CTA
+  const floatingCta = document.getElementById('floatingCta');
+  const siteFooter = document.getElementById('siteFooter');
+  window.addEventListener('scroll', () => {
+    const footerTop = siteFooter.getBoundingClientRect().top;
+    const nearFooter = footerTop < window.innerHeight + 20;
+    if (window.scrollY > 600 && !nearFooter) {
+      floatingCta.classList.add('visible');
+    } else {
+      floatingCta.classList.remove('visible');
+    }
+  });
+
+  // STAGE ACCORDION
+  function toggleStage(el) {
+    const isActive = el.classList.contains('active');
+    document.querySelectorAll('.stage').forEach(s => s.classList.remove('active'));
+    if (!isActive) el.classList.add('active');
+  }
+
+  // QUIZ LOGIC
+  const scores = { survival: 0, reactive: 0, fractured: 0, transitional: 0, architectural: 0 };
+  const answers = {};
+  const abdIndicators = [];
+  const totalQ = 8;
+
+  function selectOption(btn, q, stage) {
+    btn.closest('.quiz-options').querySelectorAll('.quiz-option').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    if (answers[q]) scores[answers[q]] = Math.max(0, scores[answers[q]] - 1);
+    answers[q] = stage;
+    scores[stage]++;
+    // Track abdicating signal (Q3 option 4 = fractured/abdicating)
+    if (q === 3 && btn.textContent.includes("stepped back more")) abdIndicators.push(true);
+    const nextBtn = document.getElementById('next' + q);
+    if (nextBtn) { nextBtn.style.opacity = '1'; nextBtn.style.pointerEvents = 'auto'; }
+    updateProgress(q);
+  }
+
+  function updateProgress(q) {
+    document.getElementById('progressFill').style.width = ((q / totalQ) * 80) + '%';
+  }
+
+  function nextQ(q) {
+    document.querySelector('[data-q="' + q + '"]').classList.remove('active');
+    document.querySelector('[data-q="' + (q + 1) + '"]').classList.add('active');
+  }
+
+  function prevQ(q) {
+    document.querySelector('[data-q="' + q + '"]').classList.remove('active');
+    document.querySelector('[data-q="' + (q - 1) + '"]').classList.add('active');
+  }
+
+  function showEmailStep() {
+    document.querySelector('[data-q="8"]').classList.remove('active');
+    document.getElementById('emailStep').classList.add('active');
+    document.getElementById('progressFill').style.width = '95%';
+  }
+
+  function submitAndShowResult() {
+    const email = document.getElementById('emailInput').value;
+    const first = document.getElementById('firstName').value;
+    showResult(first, email);
+  }
+
+  function showResult(name, email) {
+    document.getElementById('emailStep').classList.remove('active');
+    document.getElementById('progressFill').style.width = '100%';
+
+    const stage = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
+    const isAbdicating = abdIndicators.length > 0 && stage === 'fractured';
+    const isPlateaued = stage === 'architectural' && (scores.architectural >= 5);
+
+    const greeting = name ? name + ', ' : '';
+    const results = {
+      survival: {
+        badge: 'Stage 01 — Survival Owner',
+        badgeColor: 'background:rgba(180,60,40,0.1);color:#8B3020',
+        headline: 'You are the infrastructure.',
+        body: greeting + 'Everything in your business runs through you. That is not a character flaw — it is a structural reality. The business was built around your capacity, and it has not yet developed the systems to hold itself. The good news is that this is the most diagnosable state in the model. The path forward is clear. It starts with mapping what only you can do versus what the structure should be doing instead.'
+      },
+      reactive: {
+        badge: 'Stage 02 — Reactive Owner',
+        badgeColor: 'background:rgba(180,120,40,0.1);color:#8B5E20',
+        headline: 'The business is moving. The structure is not keeping up.',
+        body: greeting + 'You have momentum. Revenue is coming in and things are happening. But the founder is still the decision gate and the team still leans on you for direction on things that should have clear answers without you. The reactive state is exhausting precisely because it looks like success from the outside. The work here is building the accountability structures that let the motion sustain itself without you at the center of every cycle.'
+      },
+      fractured: {
+        badge: 'Stage 03 — Fractured Owner',
+        badgeColor: 'background:rgba(140,80,160,0.1);color:#6B3880',
+        headline: 'The authority layer is broken.',
+        body: greeting + 'Structure exists in your organization, but the authority that should animate it is misaligned. Competing signals, unclear ownership, vision that is stated but not transmitted — the team is filling the vacuum themselves, and they are filling it differently. This is one of the hardest states to self-diagnose because the people creating the fracture rarely see it. The work here is not more effort. It is structural authority alignment from the top down.'
+      },
+      transitional: {
+        badge: 'Stage 04 — Transitional Owner',
+        badgeColor: 'background:rgba(60,120,180,0.1);color:#2B5880',
+        headline: 'You are close. The gate matters.',
+        body: greeting + 'Real structure exists in your organization and it is holding weight. You are beginning to lead rather than run. The systems are load-bearing but not yet self-sustaining — growth creates friction and a few specific things still depend on your direct involvement. The gate between Transitional and Architectural is the most important crossing in the model. It is not about working harder. It is about identifying exactly what the structure cannot yet hold without you, and building those pieces deliberately.'
+      },
+      architectural: {
+        badge: 'Stage 05 — Architectural Owner',
+        badgeColor: 'background:rgba(40,140,80,0.1);color:#1B6840',
+        headline: 'The architecture holds.',
+        body: greeting + 'You have built something real. Systems are load-bearing, accountability is structural rather than personal, and the business runs without you as its infrastructure. This is not the finish line — it is the beginning of a different kind of work. The question now is what you build on top of the foundation you have created, and whether you can see the ceiling you may not know exists yet.'
+      }
+    };
+
+    const r = results[stage];
+    let html = '<div class="result-stage-badge" style="' + r.badgeColor + '">' + r.badge + '</div>';
+    html += '<div class="result-headline">' + r.headline + '</div>';
+    html += '<div class="result-body">' + r.body + '</div>';
+
+    if (isAbdicating) {
+      html += '<div class="result-variant-box"><div class="result-variant-label">Abdicating Owner Pattern Detected</div><div class="result-variant-text">Your answers suggest you may have stepped back from active leadership more than the formal structure reflects. The organization is still operating as if you are present in a way you no longer are. This gap between your actual involvement and the structure built around it creates invisible chaos for your team. This is worth naming directly before anything else is built.</div></div>';
+    }
+
+    if (isPlateaued) {
+      html += '<div class="result-variant-box"><div class="result-variant-label">Plateaued Owner Pattern Detected</div><div class="result-variant-text">Your structure is real and it is working. But the architecture you built was designed to hold a specific version of the business — and that version may now be the ceiling. The Plateaued Owner does not feel stuck because everything is functioning. The signal is not pain. It is quiet. Flat. The absence of the next level rather than the presence of obvious problems. This is worth a closer look.</div></div>';
+    }
+
+    document.getElementById('resultContent').innerHTML = html;
+    document.getElementById('quizResult').classList.add('active');
+  }
+
+  function retakeQuiz() {
+    Object.keys(scores).forEach(k => scores[k] = 0);
+    Object.keys(answers).forEach(k => delete answers[k]);
+    abdIndicators.length = 0;
+    document.getElementById('quizResult').classList.remove('active');
+    document.getElementById('emailStep').classList.remove('active');
+    document.querySelectorAll('.quiz-step').forEach(s => s.classList.remove('active'));
+    document.querySelector('[data-q="1"]').classList.add('active');
+    document.querySelectorAll('.quiz-option').forEach(o => o.classList.remove('selected'));
+    document.querySelectorAll('[id^="next"]').forEach(b => { b.style.opacity = '0.3'; b.style.pointerEvents = 'none'; });
+    document.getElementById('progressFill').style.width = '0%';
+    document.getElementById('firstName').value = '';
+    document.getElementById('lastName').value = '';
+    document.getElementById('emailInput').value = '';
+  }
+</script>
+</body>
+</html>
