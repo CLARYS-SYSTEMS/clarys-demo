@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -621,7 +622,7 @@
           <div class="result-next">
             <div class="result-next-label">What would you like to do next?</div>
             <div class="result-actions">
-              <a href="mailto:clarity@clarys.systems?subject=Clarity Call Request" class="btn-primary">Book a Clarity Call</a>
+              <a href="https://calendly.com/admin-clarys/30min" target="_blank" class="btn-primary">Book a Clarity Call</a>
               <button class="result-retake" onclick="retakeQuiz()">Retake Assessment</button>
             </div>
           </div>
@@ -650,7 +651,7 @@
   <p class="cta-sub">Find out where your organization is structurally -- and what it takes to move forward.</p>
   <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
     <a href="#assessment" class="btn-primary">Take the Assessment</a>
-    <a href="mailto:clarity@clarys.systems?subject=Clarity Call Request" class="btn-ghost" style="color:rgba(248,246,242,0.6);border-color:rgba(248,246,242,0.2)">Book a Clarity Call</a>
+    <a href="https://calendly.com/admin-clarys/30min" target="_blank" class="btn-ghost" style="color:rgba(248,246,242,0.6);border-color:rgba(248,246,242,0.2)">Book a Clarity Call</a>
   </div>
   <p class="cta-tagline">CLARYS. Architecture for humans.</p>
 </section>
@@ -660,10 +661,10 @@
   <span class="footer-logo">CLARYS</span>
   <a href="mailto:clarity@clarys.systems" style="color:rgba(248,246,242,0.5);font-family:var(--font-mono);font-size:12px;text-decoration:none;letter-spacing:0.04em;">clarity@clarys.systems</a>
   <span class="footer-rise">CLARYS is home to CLARYS RISE — workforce development for underserved youth</span>
-  <span class="footer-copy">clarys.systems &copy; 2025</span>
+  <span class="footer-copy">clarys.systems &copy; 2026</span>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   // FLOATING CTA
   const floatingCta = document.getElementById('floatingCta');
   const siteFooter = document.getElementById('siteFooter');
@@ -796,13 +797,4 @@
     document.getElementById('emailStep').classList.remove('active');
     document.querySelectorAll('.quiz-step').forEach(s => s.classList.remove('active'));
     document.querySelector('[data-q="1"]').classList.add('active');
-    document.querySelectorAll('.quiz-option').forEach(o => o.classList.remove('selected'));
-    document.querySelectorAll('[id^="next"]').forEach(b => { b.style.opacity = '0.3'; b.style.pointerEvents = 'none'; });
-    document.getElementById('progressFill').style.width = '0%';
-    document.getElementById('firstName').value = '';
-    document.getElementById('lastName').value = '';
-    document.getElementById('emailInput').value = '';
-  }
-</script>
-</body>
-</html>
+    document.querySelectorAll('.quiz-option').forEach(o => o.classList
